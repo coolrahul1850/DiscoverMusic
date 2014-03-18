@@ -7,30 +7,53 @@ function handleAPILoaded()
 // Result array and counter variable. Counter variable is used in the next button
 
 var counter = 0;
-var recommendedArtists = new Array();
 var orginialArtist = [];
+var recommendedArtists = [];
+var firsttime = 0;
+var recommended_sw = 0;
 
 function addorginialArtist(videotag){
   orginialArtist.push({videotag: videotag});
 }
 
+function addrecommendedArtists(videotag){
+  recommendedArtists.push({videotag: videotag});
+}
 
 // Search for a specified string.
 function search()
 {
+    firsttime = 0;
     orginialArtist = [];
+    recommendedArtists = [];
     getrecommendedArtists($('#query').val());   
     getoriginalArtist($('#query').val());
     $('#next').html('<button>' + 'Next' + '</button>');
-   
+    
 }
 
 
 //next button clicks shows the next song to play
 function next()
 {
-    counter = counter + 1;
-  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
+  if (recommended_sw === 1)
+  {
+  counter = counter + 1;
+  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');  
+  } 
+  else if (recommended_sw === 0)
+  {
+    console.log("found recommendedArtists");
+  } 
+  /*  if (firsttime === 1)
+  {
+console.log("orginal artist at 40" + orginialArtist[40].videotag);
+console.log("orginal artist at 80" + orginialArtist[80].videotag);
+console.log("orginal artist at 120" + orginialArtist[120].videotag);
+console.log("orginal artist at 160" + orginialArtist[160].videotag);
+
+
+  } */
 }
 
 function getrecommendedArtists(Artist)
@@ -53,12 +76,12 @@ function getrecommendedArtists(Artist)
     {
       $.each(temp.similar.artist, function(j,temp1)
         {
-          
-          recommendedArtists[i] = temp1.name;          
-       //   console.log(recommendedArtists[i]);
+          addrecommendedArtists(temp1.name);
+          getoriginalArtist(temp1.name);        
         })
     }) 
     },error: function(code, message){
+      recommended_sw = 1;
       console.log("recommended Artists is not avaliable");
     }});
   
@@ -68,7 +91,7 @@ function getrecommendedArtists(Artist)
 function getoriginalArtist(Artist)
 {
 var request = gapi.client.youtube.search.list({
-    q: $('#query').val(),
+    q: Artist,
     part: 'snippet',
     type: 'video',
     maxResults : 45,
@@ -80,9 +103,14 @@ var request = gapi.client.youtube.search.list({
     $.each(response.result.items, function(i, temp)
     {
       addorginialArtist(temp.id.videoId);
+     // console.log("this is temp " + temp.snippet.title);
     }) 
-  $('#next').html('<button>' + 'Next' + '</button>');
-  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
+ 
+  if (firsttime === 0)
+  {
+     firsttime = 1;
+     $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
+  }
   
   });
    
