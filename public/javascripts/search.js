@@ -5,19 +5,24 @@ function handleAPILoaded()
 }
 
 // Result array and counter variable. Counter variable is used in the next button
-var orginialArtist = new Array();
+
 var counter = 0;
 var recommendedArtists = new Array();
-var test = [];
+var orginialArtist = [];
+
+function addorginialArtist(videotag){
+  orginialArtist.push({videotag: videotag});
+}
+
 
 // Search for a specified string.
 function search()
 {
+    orginialArtist = [];
     getrecommendedArtists($('#query').val());   
     getoriginalArtist($('#query').val());
     $('#next').html('<button>' + 'Next' + '</button>');
-//   $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].id.videoId+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
-    console.log("the recommeded artist is " + test[0]);
+   
 }
 
 
@@ -25,8 +30,7 @@ function search()
 function next()
 {
     counter = counter + 1;
-    $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].id.videoId+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
-  
+  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
 }
 
 function getrecommendedArtists(Artist)
@@ -73,25 +77,16 @@ var request = gapi.client.youtube.search.list({
 
     request.execute(function(response) {
     var str = JSON.stringify(response.result);
-    //console.log(response.result.items);  
     $.each(response.result.items, function(i, temp)
     {
-        orginialArtist[i] = temp;
-      $('#playList').html('<pre>' + orginialArtist[i].snippet.title + '</pre>');
-      testadd(orginialArtist[i].id.videoId);
+      addorginialArtist(temp.id.videoId);
     }) 
- //  $('#search-container').html('<pre>' + str + '</pre>');
   $('#next').html('<button>' + 'Next' + '</button>');
-  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].id.videoId+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
+  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
   
-
   });
    
 }
 
 
-
-function testadd(videotag){
-  test.push({videotag: videotag});
-}
 
