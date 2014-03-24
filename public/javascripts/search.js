@@ -12,13 +12,11 @@ var recommendedArtists = [];
 var firsttime = 0;
 var recommended_sw = 0;
 
-function addorginialArtist(videotag){
-  orginialArtist.push({videotag: videotag});
+function addorginialArtist(videotag, track, artist){
+  orginialArtist.push({videotag: videotag, track : track, artist : artist});
 }
 
-function addrecommendedArtists(videotag){
-  recommendedArtists.push({videotag: videotag});
-}
+
 
 // Search for a specified string.
 function search()
@@ -26,6 +24,7 @@ function search()
     firsttime = 0;
     orginialArtist = [];
     recommendedArtists = [];
+    recommended_sw = 0;
     getrecommendedArtists($('#query').val());   
     getoriginalArtist($('#query').val());
     $('#next').html('<button>' + 'Next' + '</button>');
@@ -44,16 +43,13 @@ function next()
   else if (recommended_sw === 0)
   {
     console.log("found recommendedArtists");
+    var random = 30 * Math.floor(Math.random() * 6);
+    var randomtrack = random + Math.floor(Math.random () * 30);
+   // console.log("the random track is " + " " + randomtrack + " " + orginialArtist[randomtrack].artist + orginialArtist[randomtrack].track);
+    $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[randomtrack].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>'); 
+   
   } 
-  /*  if (firsttime === 1)
-  {
-console.log("orginal artist at 40" + orginialArtist[40].videotag);
-console.log("orginal artist at 80" + orginialArtist[80].videotag);
-console.log("orginal artist at 120" + orginialArtist[120].videotag);
-console.log("orginal artist at 160" + orginialArtist[160].videotag);
-
-
-  } */
+   
 }
 
 function getrecommendedArtists(Artist)
@@ -76,8 +72,8 @@ function getrecommendedArtists(Artist)
     {
       $.each(temp.similar.artist, function(j,temp1)
         {
-          addrecommendedArtists(temp1.name);
           getoriginalArtist(temp1.name);        
+          console.log(temp1.name);
         })
     }) 
     },error: function(code, message){
@@ -94,16 +90,18 @@ var request = gapi.client.youtube.search.list({
     q: Artist,
     part: 'snippet',
     type: 'video',
-    maxResults : 45,
-    videoEmbeddable : 'true'
+    maxResults : 30,
+    videoEmbeddable : 'true',
+ //   videoDuration : 'medium' + ',' + 'short'
+
   });
 
     request.execute(function(response) {
     var str = JSON.stringify(response.result);
     $.each(response.result.items, function(i, temp)
     {
-      addorginialArtist(temp.id.videoId);
-     // console.log("this is temp " + temp.snippet.title);
+      //addorginialArtist(temp.id.videoId, temp.snippet.title);
+      addorginialArtist(temp.id.videoId, temp.snippet.title, Artist);
     }) 
  
   if (firsttime === 0)
