@@ -1,27 +1,3 @@
-<!--<!doctype html>
-<html>
-  <head>
-    <title>My Uploads</title>
-    <link rel="stylesheet" type="text/css" href="stylesheets/my_uploads.css">
-  </head>
-  <body>
-    <div id="login-container" class="pre-auth">
-      This application requires access to your YouTube account.
-      Please <a href="#" id="login-link">authorize</a> to continue.
-    </div>
-    <div id="video-container"></div>
-    <div class="button-container">
-      <button id="prev-button" class="paging-button" onclick="previousPage();">Previous Page</button>
-      <button id="next-button" class="paging-button" onclick="nextPage();">Next Page</button>
-    </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/auth.js"></script>
-    <script type="text/javascript" src="javascripts/my_upload.js"></script>
-    <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
-  </body>
-</html>
--->
-
 <!doctype html>
 <html>
   <head>
@@ -30,12 +6,14 @@
   </head>
   <body>
     <div id="buttons">
-    <label> <input id="query" value='Iron Maiden' type="text"/><button id="search-button" disabled onclick="search()">Search</button></label> 
+    <label> <input id="query" value='default' type="text"/><button id="search-button" disabled onclick="search()">Search</button></label> 
   
     </div>
     <div id="search-container">
     </div>
+     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="javascripts/jquery-ui-1.10.4.custom.js"></script>
    <script src="javascripts/auth.js"></script> 
     <!-- files needed for last fm -->
     <script src="javascripts/lastfm.api.md5.js"></script>
@@ -43,10 +21,25 @@
     <script src="javascripts/lastfm.api.cache.js"></script>
     <!--end of last fm files -->
     <script src="javascripts/search.js"></script>
-     <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>  
-  
-    <div id="playList">
-    </div>
-    <div id="next" disabled onclick="next()"></div>
-    </body>
+     <script src="https://apis.google.com/js/client.js?onload=loadAPIClientInterfaces"></script>  
+    <!-- auto fill code -->
+    <script>
+    $(function() {
+    var query = $("#query");
+    query.keyup(function(){
+    $.getJSON("http://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1&q="+query.val()+"&key="+"AIzaSyDMns1l0mUdCsgFxqGVCkiKTryFOBm0klQ"+"&format=5&alt=json&callback=?",function(data){
+    var str = JSON.stringify(data);
+    var obj = JSON.parse(str);
+   // console.log(obj[1][0][0]);
+   
+    var availableTags = [obj[1][0][0],obj[1][1][0],obj[1][2][0],obj[1][3][0],obj[1][4][0],obj[1][5][0]];
+    $( "#query" ).autocomplete({ source: availableTags }); 
+    });
+    })
+  });
+  </script>
+  <div id="playList">
+  </div>
+  <div id="next" disabled onclick="next()"></div>
+  </body>
 </html>
