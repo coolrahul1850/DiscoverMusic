@@ -38,7 +38,7 @@ function next()
   if (recommended_sw === 1)
   {
   counter = counter + 1;
-  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');  
+  $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[counter].videotag+'?autoplay=1&verison=3' + '"iv_load_policy=3 width=420 height=300>');  
   } 
   else if (recommended_sw === 0)
   {
@@ -46,7 +46,7 @@ function next()
     var random = 30 * Math.floor(Math.random() * 6);
     var randomtrack = random + Math.floor(Math.random () * 30);
    // console.log("the random track is " + " " + randomtrack + " " + orginialArtist[randomtrack].artist + orginialArtist[randomtrack].track);
-    $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[randomtrack].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>'); 
+    $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[randomtrack].videotag+'?autoplay=1&verison=3' + '"iv_load_policy=3 width=420 height=300>'); 
    
   } 
    
@@ -91,8 +91,7 @@ var request = gapi.client.youtube.search.list({
     part: 'snippet',
     type: 'video',
     maxResults : 30,
-    videoEmbeddable : 'true',
- //   videoDuration : 'medium' + ',' + 'short'
+    videoEmbeddable : 'true'
 
   });
 
@@ -107,7 +106,7 @@ var request = gapi.client.youtube.search.list({
   if (firsttime === 0)
   {
      firsttime = 1;
-     $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].videotag+'?autoplay=1' + '"iv_load_policy=3 width=420 height=300>');
+     $('#playList').html('<iframe src="' + 'http://www.youtube.com/embed/'+orginialArtist[0].videotag+'?autoplay=1&verison=3' + '"iv_load_policy=3 width=420 height=300>');
   }
   
   });
