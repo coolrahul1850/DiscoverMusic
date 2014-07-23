@@ -32,6 +32,7 @@ app.get('/', function(req,res){
 	res.sendfile(__dirname+'/public/my_uploads.html');
 })
 app.get('/users', user.list);
+app.post('/mailus', routes.mailus);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

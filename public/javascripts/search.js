@@ -1,8 +1,8 @@
 // After the API loads, call a function to enable the search box.
-function handleAPILoaded() 
-{
+function handleAPILoaded()
+  {
     $('#search-button').attr('disabled', false);
-}
+  }
 
 // Result array and counter variable. Counter variable is used in the next button
 
@@ -74,8 +74,8 @@ function getrecommendedArtists(Artist)
         {
           getoriginalArtist(temp1.name);        
           console.log(temp1.name);
-        })
-    }) 
+        });
+    }); 
     },error: function(code, message){
       recommended_sw = 1;
       console.log("recommended Artists is not avaliable");
@@ -101,7 +101,7 @@ var request = gapi.client.youtube.search.list({
     {
       //addorginialArtist(temp.id.videoId, temp.snippet.title);
       addorginialArtist(temp.id.videoId, temp.snippet.title, Artist);
-    }) 
+    }); 
  
   if (firsttime === 0)
   {
